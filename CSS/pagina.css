@@ -1,0 +1,593 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lexend:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    /* background-image: linear-gradient(to bottom, #cfe8ff, #fbfbfb, hsl(0, 0%, 100%),  #ffffff);
+    background-color: grad; */
+    background-color: hsl(0, 0%, 100%);
+    background-image: radial-gradient(800px circle at 100% 0%,
+        hsl(211, 58%, 92%) 15%,
+        hsl(210, 86%, 97%) 35%,
+        hsl(223, 91%, 95%) 75%,
+        hsl(214, 100%, 99%) 80%,
+        transparent 100%),
+        radial-gradient(600px circle at 0% 100%,
+          hsl(202, 46%, 92%) 15%,
+          hsl(0, 0%, 100%) 35%,
+          hsl(210, 100%, 96%) 75%,
+          hsl(216, 100%, 99%) 80%,
+          transparent 100%);
+    
+}
+
+
+  .web-color {
+    text-shadow: 1.5px 1.5px 0 #233f5b;
+    font-weight: 900;
+}
+
+
+
+/* 
+header {
+      width: 100%;
+      height: 100vh;
+      background: url(https://wallpaper.wiki/wp-content/uploads/2017/05/wallpaper.wiki-Beautiful-Full-HD-Wallpaper-Download-Free-PIC-WPE0010098.jpg) no-repeat 50% 50%;
+      background-size: cover;
+} */
+
+.content {
+      width: 94%;
+      margin: 4em auto;
+      font-size: 20px;
+      line-height: 30px;
+      text-align: justify;
+}
+
+.logo {
+      line-height: 60px;
+      position: fixed;
+      float: left;
+      margin: 16px 46px;
+      color: #2b377a !important;
+      font-weight: bold;
+      font-size: 20px;
+      letter-spacing: 2px;
+}
+
+nav {
+    position: fixed;
+    width: 100%;
+    line-height: 60px;
+    z-index: 1050; /* NUEVO: Alto z-index (Bootstrap usa 1030 para navbars; 1050 es seguro). Asegura que tape todo lo demás */
+    top: 0; /* NUEVO: Explícito para fijar en la parte superior */
+    left: 0; /* NUEVO: Explícito para cubrir todo el ancho */
+}
+
+nav ul {
+      line-height: 60px;
+      list-style: none;
+      background: rgba(0, 0, 0, 0);
+      overflow: hidden;
+      color: #4d63b1 !important;
+      padding: 0;
+      text-align: right;
+      margin: 0;
+      padding-right: 40px;
+      transition: 1s;
+}
+
+nav.black ul {
+      background: #3b579a;
+}
+
+nav ul li {
+      display: inline-block;
+      padding: 16px 40px;;
+}
+
+nav ul li a {
+      text-decoration: none;
+      color: #213c86 !important;
+      font-size: 16px;
+}
+nav ul li a:hover {
+
+      color: #d1ddff;
+
+}
+
+.menu-icon {
+      line-height: 60px;
+      width: 100%;
+      background: #000000;
+      text-align: right;
+      box-sizing: border-box;
+      padding: 15px 24px;
+      cursor: pointer;
+      color: #fff;
+      display: none;
+}
+
+@media(max-width: 786px) {
+
+      .logo {
+            position: fixed;
+            top: 0;
+            margin-top: 16px;
+      }
+
+      nav ul {
+            max-height: 0px;
+            background: #000;
+      }
+
+      nav.black ul {
+            background: #000;
+      }
+
+      .showing {
+            max-height: 34em;
+      }
+
+      nav ul li {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 24px;
+            text-align: center;
+      }
+
+      .menu-icon {
+            display: block;
+      }
+
+}
+
+
+
+/* divisor---------------------------------------------------- */
+
+ 
+/* Estilo del botón */
+.btn-outline-round {
+    display: inline-block;
+    padding: 2px 15px;       /* Ajusta el tamaño */
+    border: 2px solid #4d63b1;   /* Borde inicial */
+    border-radius: 50px;          /* Bordes completamente redondeados */
+    color: #4d63b1;               /* Color del texto */
+    text-decoration: none;        /* Quitar subrayado */
+    font-weight: 400;
+    transition: all 0.3s ease;    /* Transición suave */
+    line-height: 2;
+}
+
+/* Hover: relleno y cambio de color */
+.btn-outline-round:hover {
+    background-color: #4d63b1;    /* Fondo morado al pasar el mouse */
+    color: #fff !important;                  /* Texto blanco */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Sombra opcional */
+}
+
+
+
+
+
+
+
+.carousel-shadow {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 45%;
+    right: 30% !important;
+    transform: translate(-20%, -50%);
+    text-align: left !important;
+    padding: 50px; 
+    color: white; 
+}
+.carousel-caption h5 {
+    font-size: 60px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3); 
+    font-weight: 700;
+  }
+
+.carousel-02{
+    color:#1c5085;
+    font-weight: 100 !important;
+
+} 
+.programacion {
+    color:#2e4a80;
+}
+.intro{
+    color:#f4f4f4;
+}
+.carousel-caption p {
+    margin-top: 5%;
+    font-size: 20px; 
+    font-weight: 100;
+  }
+
+
+
+.boton {
+margin-top: 15px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  color: white !important;
+  background-image: linear-gradient(to right, #7ca6e2, #4763b8);
+  border-radius: 25px;
+  padding: 10px 20px;
+  height: 50px;
+  width: auto;
+  border: none;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  line-height: 30px;
+}
+.boton:hover {
+  transform: scale(1.05);
+}
+
+
+
+.carousel-control-prev, .carousel-control-next {
+    width: 1%;
+  }
+  
+  .carousel-control-prev {
+    left: -70px !important;
+  }
+  
+  .carousel-control-next {
+    right: -20px;
+  }
+
+  .blog-header {
+    line-height: 1;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  #iniciarsesion{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+
+  
+  h1, h2, h3, h4, h6 {
+    font-family: "DM Sans";
+  }
+  
+  .display-4 {
+    font-size: 2.5rem;
+  }
+  @media (min-width: 768px) {
+    .display-4 {
+      font-size: 3rem;
+    }
+  }
+
+  .container-p {
+    background-color: white;
+  }
+
+  #pantalla {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+}
+
+.contenedor {
+  width: 90%;
+  margin: 0 auto; /* centra horizontalmente */
+  padding: 30px;
+}
+
+
+  
+  .nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+  }
+  
+  .nav-scroller .nav {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .nav-scroller .nav-link {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: .875rem;
+  }
+
+
+html.barra{
+    overflow: hidden /*oculta la barra de desplazamiento*/
+}
+
+#frame {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* altura completa de la ventana */
+    width: 100vw; /* ancho completo de la ventana */
+    margin: 0;
+    padding: 0;
+}
+
+iframe {
+    border: none;
+}
+
+#header {
+    height: 15vh; 
+    width: 100%;
+}
+
+#main {
+    flex-grow: 1;
+    width: 100%;
+    overflow: auto; /* Permite el desplazamiento si el contenido es mayor */
+}
+
+.img{
+    width: auto;
+    max-height: 65px;
+}
+
+
+
+figure {
+    margin: 5px 5px;
+    display: flex; 
+    align-items: center;
+}
+
+
+#derecha {
+    display: flex; 
+    align-items: center;
+    margin-left: auto;
+    flex-wrap: nowrap;
+}       
+
+
+h1 {
+   
+    color: #fff; 
+    font-size: 30px;
+    margin-bottom: 0; /* Eliminar margen inferior */
+}
+
+
+p{
+    font-size: larger;
+}
+
+.texto{
+    text-align: justify;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.centro{
+    text-align: center;
+}
+
+.regresar{
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color:  darkblue;
+    background-color: gold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bolder
+}
+
+.regresar:hover{
+    color: white;
+    background-color:  indianred;
+}
+
+
+/*GUIA*/
+#pdf{
+    width:80%;
+    height:600px
+}
+
+/*ADMIN USUARIOS*/
+label{
+    font-weight:  bolder
+}
+
+ .enlaces-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.enlace-item {
+    text-align: center;
+}
+
+.enlace-item p {
+    margin-bottom: 5px;
+}
+
+ 
+ /*TABLA CONSULTAR USUARIOS ALUMNOS*/
+ #tablauser{
+      width: 100%; 
+      padding-left: 20px;
+      padding-right: 20px;
+ }
+ 
+ th, td { 
+     text-align: left; 
+     padding: 8px; 
+     border-bottom: 1px solid #ddd; 
+ }
+ 
+ th {
+     background-color: gold; 
+     color:darkblue;
+ }
+ 
+/*Tabla para ver la consulta join informe*/ 
+ #tablajoin{
+      width: 100%; 
+      padding-left: 20px;
+      padding-right: 20px;
+ }
+ 
+ /*Tablas consulta*/
+ 
+ caption{
+     font-size: larger;
+    font-weight: bold;
+    text-align: center;
+    color:red;
+ }
+
+
+ /* navbar--------------------- */
+/* header {
+      width: 100%;
+      height: 100vh;
+      background: url(https://wallpaper.wiki/wp-content/uploads/2017/05/wallpaper.wiki-Beautiful-Full-HD-Wallpaper-Download-Free-PIC-WPE0010098.jpg) no-repeat 50% 50%;
+      background-size: cover;
+} */
+
+.content {
+      width: 94%;
+      margin: 4em auto;
+      font-size: 20px;
+      line-height: 30px;
+      text-align: justify;
+}
+
+.logo {
+      line-height: 60px;
+      position: fixed;
+      float: left;
+      margin: 16px 46px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 20px;
+      letter-spacing: 2px;
+}
+
+nav {
+      position: fixed;
+      width: 100%;
+      line-height: 60px;
+}
+
+nav ul {
+      line-height: 60px;
+      list-style: none;
+      background: rgba(0, 0, 0, 0);
+      overflow: hidden;
+      color: #fff;
+      padding: 0;
+      text-align: right;
+      margin: 0;
+      padding-right: 40px;
+      transition: 1s;
+}
+
+nav.black ul {
+      background: #000;
+}
+
+nav ul li {
+      display: inline-block;
+      padding: 16px 40px;;
+}
+
+nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 16px;
+}
+
+.menu-icon {
+      line-height: 60px;
+      width: 100%;
+      background: #000;
+      text-align: right;
+      box-sizing: border-box;
+      padding: 15px 24px;
+      cursor: pointer;
+      color: #fff;
+      display: none;
+}
+
+@media(max-width: 786px) {
+
+      .logo {
+            position: fixed;
+            top: 0;
+            margin-top: 16px;
+      }
+
+      nav ul {
+            max-height: 0px;
+            background: #000;
+      }
+
+      nav.black ul {
+            background: #000;
+      }
+
+      .showing {
+            max-height: 34em;
+      }
+
+      nav ul li {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 24px;
+            text-align: center;
+      }
+
+      .menu-icon {
+            display: block;
+      }
+
+}
+
+
