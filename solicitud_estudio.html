@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitud de Estudio - Clínica Endocrinología</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <!-- Agregar las bibliotecas para generar PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --primary-blue: #2e4a80;
+      --light-blue: #7ca6e2;
+      --dark-blue: #1c5085;
+      --accent-blue: #4d63b1;
+      --text-dark: #2e4a80;
+      --text-dark2: #ffffff;
+      --text-light: #5f6368;
+      --border-light: #dadce0;
+    }
+
+    body {
+      font-family: "Montserrat", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 300;
+      font-style: normal;
+      background-color: hsl(0, 0%, 100%);
+      background-image: radial-gradient(800px circle at 100% 0%,
+          hsl(211, 58%, 92%) 15%,
+          hsl(210, 86%, 97%) 35%,
+          hsl(223, 91%, 95%) 75%,
+          hsl(214, 100%, 99%) 80%,
+          transparent 100%),
+          radial-gradient(600px circle at 0% 100%,
+            hsl(202, 46%, 92%) 15%,
+            hsl(0, 0%, 100%) 35%,
+            hsl(210, 100%, 96%) 75%,
+            hsl(216, 100%, 99%) 80%,
+            transparent 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1, h3, h4, h5, h6 {
+      font-family: "DM Sans", sans-serif;
+      color: var(--text-dark);
+    }
+
+    h2{
+      font-family: "DM Sans", sans-serif;
+      color: var(--text-dark2);
+    }
+
+    .form-container { 
+      max-width: 800px; 
+      margin: 2rem auto; 
+    }
+
+    .study-form {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+
+    .form-header { 
+      background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); 
+      color: white; 
+      padding: 2rem; 
+      text-align: center; 
+    }
+
+    .form-header h2 { 
+      margin: 0; 
+      font-weight: 700; 
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .form-header p { 
+      opacity: 0.9; 
+      margin: 0.5rem 0 0 0; 
+      font-weight: 300;
+    }
+
+    .form-body { 
+      padding: 2rem; 
+    }
+
+    .form-label { 
+      font-weight: 600; 
+      color: var(--text-dark); 
+      margin-bottom: 0.5rem; 
+      font-size: 0.95rem;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .form-control, .form-select, textarea {
+      border-radius: 10px; 
+      border: 2px solid var(--border-light); 
+      padding: 0.75rem 1rem; 
+      transition: all 0.3s ease;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .form-control:focus, .form-select:focus, textarea:focus {
+      border-color: var(--primary-blue); 
+      box-shadow: 0 0 0 3px rgba(46, 74, 128, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-success {
+      background: linear-gradient(to right, #7ca6e2, #4763b8);
+      border: none;
+      border-radius: 25px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .btn-success:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #6a96d0, #3a53a0);
+    }
+
+    .btn-outline-secondary {
+      border: 2px solid var(--text-light);
+      color: var(--text-light);
+      border-radius: 25px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+      background: var(--text-light);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .study-type-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); 
+      gap: 1rem; 
+      margin: 1rem 0; 
+    }
+
+    .study-type-card { 
+      border: 2px solid var(--border-light); 
+      border-radius: 10px; 
+      padding: 1rem; 
+      text-align: center; 
+      cursor: pointer; 
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .study-type-card:hover { 
+      border-color: var(--primary-blue); 
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 4px 12px rgba(46, 74, 128, 0.1);
+    }
+
+    .study-type-card.selected { 
+      border-color: var(--primary-blue); 
+      background: linear-gradient(135deg, #e8f0fe, #d2e3fc);
+      transform: scale(1.02);
+    }
+
+    .study-icon { 
+      font-size: 2rem; 
+      color: var(--primary-blue); 
+      margin-bottom: 0.5rem; 
+      transition: all 0.3s ease;
+    }
+
+    .study-type-card.selected .study-icon {
+      color: var(--dark-blue);
+      transform: scale(1.1);
+    }
+
+    .alert-info {
+      background: linear-gradient(135deg, #e8f0fe, #d2e3fc);
+      border: 1px solid var(--primary-blue);
+      border-left: 4px solid var(--primary-blue);
+      border-radius: 10px;
+      color: var(--text-dark);
+    }
+
+    .text-info {
+      color: var(--primary-blue) !important;
+    }
+
+    .badge {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 600;
+      border-radius: 12px;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .bg-info {
+      background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)) !important;
+    }
+
+    .invalid-feedback {
+      color: #dc3545;
+      font-size: 0.875rem;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    #studyTypeError {
+      color: #dc3545;
+      font-size: 0.875rem;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .needs-validation .form-control:invalid,
+    .needs-validation .form-select:invalid,
+    .needs-validation textarea:invalid {
+      border-color: #dc3545;
+    }
+
+    .needs-validation .form-control:valid,
+    .needs-validation .form-select:valid,
+    .needs-validation textarea:valid {
+      border-color: #198754;
+    }
+
+    .border-top {
+      border-top: 1px solid var(--border-light) !important;
+    }
+
+    @media (max-width: 768px) {
+      .form-body { 
+        padding: 1.5rem; 
+      }
+      .form-container {
+        margin: 1rem auto;
+      }
+      body {
+        padding: 10px;
+      }
+      .study-type-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.5rem;
+      }
+      .study-type-card {
+        padding: 0.75rem;
+      }
+      .study-icon {
+        font-size: 1.5rem;
+      }
+      .d-flex {
+        flex-direction: column;
+        gap: 1rem !important;
+      }
+      .btn-success, .btn-outline-secondary {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <div class="study-form">
+    <div class="form-header">
+      <h2><i class="fas fa-vial me-2"></i>Solicitud de Estudio Médico</h2>
+      <p>Complete los datos para solicitar estudios de laboratorio o imagen</p>
+    </div>
+
+    <!-- Información del paciente -->
+    <div class="alert alert-info mx-3 mt-3">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h5 class="mb-1 text-info">Carlos Rodríguez García</h5>
+          <p class="mb-0">ID: P-001 | Última consulta: 20/09/2025 | Expediente: EXP-2001</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <span class="badge bg-info fs-6">Solicitud Nueva</span>
+        </div>
+      </div>
+    </div>
+
+    <form class="form-body needs-validation" id="studyForm" novalidate>
+      <!-- Datos de la solicitud -->
+      <input type="hidden" value="SOL-1005" name="ID_SOLICITUD">
+      <input type="hidden" value="1001" name="ID_CONSULTA">
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Fecha de Solicitud *</label>
+          <input type="date" class="form-control" value="2025-09-24" required name="FECHA_SOLICITUD">
+          <div class="invalid-feedback">Ingrese una fecha válida.</div>
+        </div>
+      </div>
+
+      <!-- Tipo de estudio -->
+      <div class="mb-4">
+        <label class="form-label">Tipo de Estudio *</label>
+        <div class="study-type-grid">
+          <div class="study-type-card" data-type="blood"> 
+            <div class="study-icon"><i class="fas fa-tint"></i></div> 
+            Análisis de Sangre 
+          </div>
+          <div class="study-type-card" data-type="image"> 
+            <div class="study-icon"><i class="fas fa-x-ray"></i></div> 
+            Estudio de Imagen 
+          </div>
+          <div class="study-type-card" data-type="urine"> 
+            <div class="study-icon"><i class="fas fa-flask"></i></div> 
+            Análisis de Orina 
+          </div>
+          <div class="study-type-card" data-type="other"> 
+            <div class="study-icon"><i class="fas fa-microscope"></i></div> 
+            Otros Estudios 
+          </div>
+        </div>
+        <div class="invalid-feedback d-block" id="studyTypeError" style="display:none;">Seleccione un tipo de estudio.</div>
+      </div>
+
+      <!-- Estudio específico -->
+      <div class="mb-3">
+        <label class="form-label">Estudio Específico *</label>
+        <select class="form-select" required name="TIPO_SOLICITUD" id="estudioSelect">
+          <option value="">Seleccione un estudio...</option>
+        </select>
+        <div class="invalid-feedback">Seleccione un estudio específico.</div>
+      </div>
+
+      <!-- Motivo -->
+      <div class="mb-3">
+        <label class="form-label">Motivo de la Solicitud *</label>
+        <textarea class="form-control" rows="4" placeholder="Describa el motivo clínico..." required name="MOTIVO_SOLICITUD">Control rutinario de diabetes tipo 2 y perfil lipídico.</textarea>
+        <div class="invalid-feedback">Ingrese el motivo de la solicitud.</div>
+      </div>
+
+      <!-- Botones -->
+      <div class="d-flex gap-3 justify-content-end pt-3 border-top">
+        <button type="button" class="btn btn-outline-secondary" id="cancelBtn">
+          <i class="fas fa-times me-2"></i>Cancelar
+        </button>
+        <button type="submit" class="btn btn-success" id="submitBtn">
+          <i class="fas fa-paper-plane me-2"></i>Generar Solicitud
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Opciones de estudios por tipo
+  const estudios = {
+    blood: [
+      "Hemograma completo",
+      "Perfil lipídico",
+      "Glucosa en ayunas",
+      "Hemoglobina glicosilada (HbA1c)",
+      "Insulina",
+      "Función tiroidea"
+    ],
+    image: [
+      "Ultrasonido abdominal",
+      "Ultrasonido tiroideo",
+      "Radiografía de tórax",
+      "Resonancia magnética",
+      "Densitometría ósea"
+    ],
+    urine: [
+      "Examen general de orina",
+      "Microalbuminuria"
+    ],
+    other: [
+      "Cortisol",
+      "Prolactina",
+      "ACTH",
+      "Pruebas hormonales específicas"
+    ]
+  };
+
+  let selectedType = "";
+
+  // Selección de tipo de estudio
+  document.querySelectorAll('.study-type-card').forEach(card => {
+    card.addEventListener('click', function() {
+      document.querySelectorAll('.study-type-card').forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedType = this.dataset.type;
+
+      // Llenar select
+      const estudioSelect = document.getElementById("estudioSelect");
+      estudioSelect.innerHTML = '<option value="">Seleccione un estudio...</option>';
+      estudios[selectedType].forEach(estudio => {
+        const option = document.createElement("option");
+        option.value = estudio;
+        option.textContent = estudio;
+        estudioSelect.appendChild(option);
+      });
+
+      // Ocultar error
+      document.getElementById("studyTypeError").style.display = "none";
+    });
+  });
+
+  // Cancelar
+  document.getElementById("cancelBtn").addEventListener("click", () => {
+    window.location.href = "detalle_paciente.html";
+  });
+
+  // Función para generar PDF
+  function generarPDF() {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      // Configuración inicial
+      const pageWidth = doc.internal.pageSize.getWidth();
+      let yPosition = 20;
+      
+      // Encabezado del PDF
+      doc.setFillColor(46, 74, 128); // Color azul primario
+      doc.rect(0, 0, pageWidth, 40, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Solicitud de Estudio de Laboratorio', pageWidth / 2, 15, { align: 'center' });
+      
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Clínica de Endocrinología', pageWidth / 2, 25, { align: 'center' });
+      
+      // Datos del paciente
+      yPosition = 55;
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Datos del Paciente', 20, yPosition);
+      
+      yPosition += 10;
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Nombre completo: Carlos Rodríguez García`, 20, yPosition);
+      yPosition += 7;
+      doc.text(`ID Paciente: P-001`, 20, yPosition);
+      yPosition += 7;
+      doc.text(`Expediente: EXP-2001`, 20, yPosition);
+      
+      // Datos de la solicitud
+      yPosition += 15;
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Datos de la Solicitud', 20, yPosition);
+      
+      yPosition += 10;
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`ID Solicitud: SOL-1005`, 20, yPosition);
+      yPosition += 7;
+      
+      // Formatear fecha
+      const fechaInput = document.querySelector('input[name="FECHA_SOLICITUD"]').value;
+      const fechaParts = fechaInput.split('-');
+      const fechaFormateada = `${fechaParts[2]}/${fechaParts[1]}/${fechaParts[0]}`;
+      doc.text(`Fecha de solicitud: ${fechaFormateada}`, 20, yPosition);
+      yPosition += 7;
+      
+      const tipoEstudio = document.querySelector('.study-type-card.selected').textContent.trim();
+      doc.text(`Tipo de estudio: ${tipoEstudio}`, 20, yPosition);
+      yPosition += 7;
+      
+      const estudioEspecifico = document.getElementById('estudioSelect').value;
+      doc.text(`Estudio específico: ${estudioEspecifico}`, 20, yPosition);
+      yPosition += 7;
+      
+      const motivo = document.querySelector('textarea[name="MOTIVO_SOLICITUD"]').value;
+      // Dividir el motivo en líneas si es muy largo
+      const motivoLines = doc.splitTextToSize(`Motivo: ${motivo}`, pageWidth - 40);
+      doc.text(motivoLines, 20, yPosition);
+      yPosition += motivoLines.length * 7;
+      
+      // Instrucciones para el laboratorio
+      yPosition += 10;
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Instrucciones para el Laboratorio', 20, yPosition);
+      
+      yPosition += 10;
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      const instrucciones = [
+        "Por favor realizar los estudios solicitados según protocolo estándar.",
+        "Entregar resultados en formato digital e impreso.",
+        "Para estudios de sangre: Ayuno de 8-12 horas.",
+        "Para estudios de orina: Primera muestra de la mañana."
+      ];
+      
+      instrucciones.forEach(line => {
+        doc.text(line, 20, yPosition);
+        yPosition += 7;
+      });
+      
+      // Firma del médico
+      yPosition += 15;
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Datos del Médico', 20, yPosition);
+      
+      yPosition += 10;
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Médico solicitante: Dr. Alejandro Méndez`, 20, yPosition);
+      yPosition += 7;
+      doc.text(`Especialidad: Endocrinología`, 20, yPosition);
+      yPosition += 7;
+      doc.text(`Cédula profesional: 12345678`, 20, yPosition);
+      
+  // Área de firma y sello
+      yPosition += 15;
+      
+      // Agregar firma (puedes reemplazar esta URL por la de tu imagen)
+      const firmaUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/af/Firma_Humberto_Gordon.png'; // Ejemplo de firma
+      const selloUrl = 'https://m.media-amazon.com/images/I/510Xcr3E2WL.jpg'; // Ejemplo de sello
+      
+      // Intentar cargar y agregar la firma
+      try {
+        // Firma del médico (lado izquierdo)
+        doc.addImage(firmaUrl, 'PNG', 20, yPosition, 40, 20);
+        
+        // Sello médico (lado derecho)
+        doc.addImage(selloUrl, 'PNG', pageWidth - 60, yPosition, 40, 40);
+        
+        // Texto debajo de la firma
+        doc.setFontSize(10);
+        doc.text('Dr. Alejandro Méndez', 25, yPosition + 25);
+        doc.text('Endocrinólogo', 25, yPosition + 30);
+        
+        // Texto debajo del sello
+        doc.text('Cédula: 12345678', pageWidth - 55, yPosition + 45);
+        
+      } catch (imageError) {
+        console.log('No se pudieron cargar las imágenes, usando firma textual');
+        // Fallback: línea de firma tradicional
+        doc.line(20, yPosition, 80, yPosition);
+        doc.setFontSize(10);
+        doc.text('Firma del médico', 25, yPosition + 10);
+        
+        doc.line(pageWidth - 80, yPosition, pageWidth - 20, yPosition);
+        doc.text('Sello médico', pageWidth - 75, yPosition + 10);
+      }
+      
+      
+      // Pie de página
+      yPosition += 40;
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
+      doc.text('Este documento es válido por 30 días a partir de la fecha de emisión.', 20, yPosition);
+      yPosition += 5;
+      doc.text('Clínica de Endocrinología - Av. Principal 123, Ciudad - Tel: (555) 123-4567', 20, yPosition);
+      
+      // Generar el PDF como blob y abrirlo en nueva pestaña
+      const pdfBlob = doc.output('blob');
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      
+      // Abrir en nueva pestaña
+      const newWindow = window.open(pdfUrl, '_blank');
+      
+      // Si el navegador bloquea la ventana emergente, mostrar mensaje
+      if (!newWindow) {
+        alert('El navegador bloqueó la ventana emergente. Por favor, permite ventanas emergentes para este sitio.');
+        // Alternativa: descargar el PDF
+        doc.save('solicitud_laboratorio_SOL-1005.pdf');
+      }
+      
+      return true;
+      
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      return false;
+    }
+  }
+
+  // Validación y envío
+  document.getElementById('studyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = this;
+
+    // Verificar tipo de estudio seleccionado
+    if (!selectedType) {
+      document.getElementById("studyTypeError").style.display = "block";
+      return;
+    }
+
+    if (!form.checkValidity()) {
+      e.stopPropagation();
+      form.classList.add("was-validated");
+      return;
+    }
+
+    const submitBtn = document.getElementById("submitBtn");
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generando PDF...';
+    submitBtn.disabled = true;
+
+    // Generar PDF después de un breve retraso
+    setTimeout(() => {
+      const success = generarPDF();
+      
+      if (success) {
+        // Restaurar el botón después de un tiempo
+        setTimeout(() => {
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+          alert('Solicitud de estudio generada exitosamente. El PDF se ha abierto en una nueva pestaña.');
+        }, 1000);
+      } else {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        alert('Error al generar el PDF. Por favor, intente nuevamente.');
+      }
+    }, 500);
+  });
+</script>
+
+</body>
+</html>

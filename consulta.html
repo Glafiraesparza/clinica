@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Consulta - Clínica</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #2e4a80;
+      --light-blue: #7ca6e2;
+      --dark-blue: #1c5085;
+      --accent-blue: #4d63b1;
+      --text-dark: #2e4a80;
+      --text-dark2: #ffffff;
+      --text-light: #5f6368;
+      --border-light: #dadce0;
+      --success-green: #34a853;
+    }
+
+    body {
+      font-family: "Montserrat", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 300;
+      font-style: normal;
+      background-color: hsl(0, 0%, 100%);
+      background-image: radial-gradient(800px circle at 100% 0%,
+          hsl(211, 58%, 92%) 15%,
+          hsl(210, 86%, 97%) 35%,
+          hsl(223, 91%, 95%) 75%,
+          hsl(214, 100%, 99%) 80%,
+          transparent 100%),
+          radial-gradient(600px circle at 0% 100%,
+            hsl(202, 46%, 92%) 15%,
+            hsl(0, 0%, 100%) 35%,
+            hsl(210, 100%, 96%) 75%,
+            hsl(216, 100%, 99%) 80%,
+            transparent 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1, h3, h4, h5, h6 {
+      font-family: "DM Sans", sans-serif;
+      color: var(--text-dark);
+    }
+
+    h2{
+      font-family: "DM Sans", sans-serif;
+      color: var(--text-dark2);
+    }
+
+    .form-container { 
+      max-width: 1000px; 
+      margin: 2rem auto; 
+    }
+
+    .consultation-form {
+      background: white; 
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border-light); 
+      overflow: hidden;
+    }
+
+    .form-header {
+      background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+      color: white; 
+      padding: 2rem; 
+      text-align: center;
+    }
+
+    .form-header h2 { 
+      margin: 0; 
+      font-weight: 700; 
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .form-header p { 
+      opacity: 0.9; 
+      margin: 0.5rem 0 0 0; 
+      font-weight: 300;
+    }
+
+    .form-body { 
+      padding: 2rem; 
+    }
+
+    .section-title {
+      color: var(--primary-blue); 
+      font-weight: 600;
+      margin: 2rem 0 1rem 0; 
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e8f0fe; 
+      font-size: 1.1rem;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .section-title:first-child { 
+      margin-top: 0; 
+    }
+
+    .form-label {
+      font-weight: 600; 
+      color: var(--text-dark);
+      margin-bottom: 0.5rem; 
+      font-size: 0.95rem;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .form-control, .form-select, textarea {
+      border-radius: 10px; 
+      border: 2px solid var(--border-light);
+      padding: 0.75rem 1rem; 
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .form-control:focus, .form-select:focus, textarea:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(46, 74, 128, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .input-group-text {
+      background: #e8f0fe;
+      border: 2px solid var(--border-light);
+      border-right: none; 
+      color: var(--primary-blue);
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .vital-signs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem; 
+      margin-bottom: 1rem;
+    }
+
+    .vital-card {
+      background: #e8f0fe; 
+      border-radius: 10px;
+      padding: 1rem; 
+      border-left: 4px solid var(--primary-blue);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .vital-card:hover {
+      transform: scale(1.02);
+    }
+
+    .vital-card .form-label { 
+      color: var(--primary-blue); 
+      font-size: 0.9rem; 
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #7ca6e2, #4763b8);
+      border: none; 
+      border-radius: 25px;
+      padding: 0.75rem 2rem; 
+      font-weight: 600; 
+      font-size: 1rem;
+      transition: all 0.3s ease; 
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #6a96d0, #3a53a0);
+    }
+
+    .btn-outline-primary {
+      border: 2px solid var(--primary-blue); 
+      color: var(--primary-blue);
+      border-radius: 25px; 
+      padding: 0.75rem 2rem; 
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-family: "DM Sans", sans-serif;
+      background: transparent;
+    }
+
+    .btn-outline-primary:hover { 
+      background: var(--primary-blue); 
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .form-actions {
+      background: #f8f9fa; 
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border-light);
+      display: flex; 
+      gap: 1rem; 
+      justify-content: flex-end;
+    }
+
+    .patient-info-banner {
+      background: linear-gradient(135deg, #e8f0fe, #d2e3fc);
+      border-radius: 10px; 
+      padding: 1rem;
+      margin-bottom: 1.5rem; 
+      border-left: 4px solid var(--primary-blue);
+    }
+
+    .character-count {
+      font-size: 0.8rem; 
+      color: var(--text-light);
+      text-align: right; 
+      margin-top: 0.25rem;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .badge {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .form-body { 
+        padding: 1.5rem; 
+      }
+      .form-actions { 
+        flex-direction: column; 
+      }
+      .vital-signs-grid {
+        grid-template-columns: 1fr;
+      }
+      body {
+        padding: 10px;
+      }
+    }
+
+    /* Estilos específicos para mantener la funcionalidad */
+    .needs-validation .form-control:invalid,
+    .needs-validation .form-select:invalid {
+      border-color: #dc3545;
+    }
+
+    .needs-validation .form-control:valid,
+    .needs-validation .form-select:valid {
+      border-color: #198754;
+    }
+
+    .invalid-feedback {
+      color: #dc3545;
+      font-size: 0.875rem;
+      font-family: "Montserrat", sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <div class="consultation-form">
+      <!-- Header del formulario -->
+      <div class="form-header">
+        <h2><i class="fas fa-notes-medical me-2"></i>Registrar Nueva Consulta</h2>
+        <p>Complete la información de la consulta médica</p>
+      </div>
+
+      <!-- Información del paciente -->
+      <div class="patient-info-banner mx-3 mt-3">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5 class="mb-1 text-primary">Carlos Rodríguez García</h5>
+            <p class="mb-0 text-muted">ID: P-001 | 45 años | Masculino | Expediente: EXP-2001</p>
+          </div>
+          <div class="col-md-4 text-md-end">
+            <span class="badge bg-primary fs-6">Consulta Nueva</span>
+          </div>
+        </div>
+      </div>
+
+      <form class="form-body needs-validation" id="consultaForm" novalidate>
+        <!-- Información básica -->
+        <h4 class="section-title"><i class="fas fa-calendar-alt me-2"></i>Información de la Consulta</h4>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Fecha de Consulta *</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+              <input type="date" class="form-control" required value="2025-09-25">
+              <div class="invalid-feedback">Seleccione una fecha válida.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signos Vitales -->
+        <h4 class="section-title"><i class="fas fa-heartbeat me-2"></i>Signos Vitales</h4>
+        <div class="vital-signs-grid">
+          <div class="vital-card">
+            <label class="form-label">Peso (kg) *</label>
+            <div class="input-group">
+              <input type="number" class="form-control" step="0.1" required value="78.0">
+              <span class="input-group-text">kg</span>
+              <div class="invalid-feedback">Ingrese un peso válido.</div>
+            </div>
+          </div>
+          <div class="vital-card">
+            <label class="form-label">Altura (cm) *</label>
+            <div class="input-group">
+              <input type="number" class="form-control" required value="175">
+              <span class="input-group-text">cm</span>
+              <div class="invalid-feedback">Ingrese una altura válida.</div>
+            </div>
+          </div>
+          <div class="vital-card">
+            <label class="form-label">Presión Arterial *</label>
+            <input type="text" class="form-control" placeholder="120/80" required value="120/80">
+            <div class="invalid-feedback">Ingrese un valor válido.</div>
+          </div>
+          <div class="vital-card">
+            <label class="form-label">Frecuencia Cardíaca *</label>
+            <div class="input-group">
+              <input type="number" class="form-control" required value="72">
+              <span class="input-group-text">lpm</span>
+              <div class="invalid-feedback">Ingrese un valor válido.</div>
+            </div>
+          </div>
+          <div class="vital-card">
+            <label class="form-label">Glucosa (mg/dL) *</label>
+            <div class="input-group">
+              <input type="number" class="form-control" required value="110">
+              <span class="input-group-text">mg/dL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Síntomas -->
+        <h4 class="section-title"><i class="fas fa-stethoscope me-2"></i>Síntomas Reportados</h4>
+        <div class="mb-3">
+          <label class="form-label">Descripción de Síntomas *</label>
+          <textarea class="form-control" rows="4" required>Mareos leves y fatiga desde hace 2 semanas.</textarea>
+          <div class="character-count">Máximo 1000 caracteres</div>
+          <div class="invalid-feedback">Este campo es obligatorio.</div>
+        </div>
+
+        <!-- Exploración Física -->
+        <h4 class="section-title"><i class="fas fa-user-md me-2"></i>Exploración Física</h4>
+        <div class="mb-3">
+          <label class="form-label">Hallazgos en la Exploración *</label>
+          <textarea class="form-control" rows="4" required>Signos vitales dentro de parámetros normales. Sin hallazgos patológicos importantes.</textarea>
+          <div class="character-count">Máximo 1000 caracteres</div>
+          <div class="invalid-feedback">Este campo es obligatorio.</div>
+        </div>
+
+        <!-- Diagnóstico -->
+        <h4 class="section-title"><i class="fas fa-diagnoses me-2"></i>Diagnóstico</h4>
+        <div class="mb-3">
+          <label class="form-label">Diagnóstico Principal *</label>
+          <textarea class="form-control" rows="3" required>Diabetes tipo 2 estable; control glucémico adecuado.</textarea>
+          <div class="character-count">Máximo 500 caracteres</div>
+          <div class="invalid-feedback">Este campo es obligatorio.</div>
+        </div>
+
+        <!-- Observaciones -->
+        <h4 class="section-title"><i class="fas fa-file-medical me-2"></i>Observaciones</h4>
+        <div class="mb-3">
+          <label class="form-label">Observaciones Adicionales</label>
+          <textarea class="form-control" rows="3">Se ajusta dosis de Metformina y se recomienda control dietético.</textarea>
+          <div class="character-count">Máximo 500 caracteres</div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline-primary" id="cancelBtn" href="detalle_paciente.html">
+            <i class="fas fa-times me-2"></i>Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">
+            <i class="fas fa-save me-2"></i>Guardar Consulta
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Contador de caracteres
+    document.querySelectorAll('textarea').forEach(textarea => {
+      const counter = textarea.nextElementSibling;
+      const update = () => {
+        const count = textarea.value.length;
+        const match = counter && counter.textContent.match(/\d+/);
+        const maxLength = match ? parseInt(match[0], 10) : 1000;
+        if (counter) counter.textContent = `${count}/${maxLength} caracteres`;
+        if (count > maxLength * 0.9) {
+          counter.style.color = '#dc3545';
+        } else {
+          counter.style.color = 'var(--text-light)';
+        }
+      };
+      textarea.addEventListener('input', update);
+      update();
+    });
+
+    // Cancelar
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      window.location.href = 'detalle_paciente.html';
+    });
+
+    // Validación y envío
+    const form = document.getElementById('consultaForm');
+    const saveBtn = document.getElementById('saveBtn');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        e.stopPropagation();
+        form.classList.add('was-validated');
+        return;
+      }
+      
+      const originalText = saveBtn.innerHTML;
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
+      saveBtn.disabled = true;
+
+      setTimeout(() => {
+        alert('Consulta guardada exitosamente.');
+        window.location.href = 'detalle_paciente.html';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

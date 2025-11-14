@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salud Integral - Administrador</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #2b377a;
+            --secondary-color: #4d63b1;
+            --accent-color: #3498db;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+        
+        body {
+            font-family: "Montserrat", sans-serif;
+            background-color: #ffffff;
+            background-image: radial-gradient(800px circle at 100% 0%,
+                hsl(211, 58%, 92%) 15%,
+                hsl(210, 86%, 97%) 35%,
+                hsl(223, 91%, 95%) 75%,
+                hsl(214, 100%, 99%) 80%,
+                transparent 100%),
+                radial-gradient(600px circle at 0% 100%,
+                hsl(202, 46%, 92%) 15%,
+                hsl(0, 0%, 100%) 35%,
+                hsl(210, 100%, 96%) 75%,
+                hsl(216, 100%, 99%) 80%,
+                transparent 100%);
+            padding-top: 76px;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link {
+            color: var(--primary-color) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent-color) !important;
+        }
+        
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 50px;
+        }
+        
+        .alert-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1050;
+            max-width: 400px;
+        }
+        
+        .user-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .user-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .user-card:hover {
+            border-color: var(--accent-color);
+            background-color: #f8f9fa;
+        }
+        
+        .user-card.selected {
+            border-color: var(--primary-color);
+            background-color: #e3f2fd;
+        }
+        
+        .user-type-badge {
+            font-size: 0.75rem;
+        }
+        
+        .user-list-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-heartbeat me-2"></i>SALUD INTEGRAL
+            </a>
+            
+            <!-- Botón para móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Elementos del menú -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="loadPage('inicio')">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="loadPage('agregar')">Agregar Usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="loadPage('consultar')">Consultar Usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="loadPage('actualizar')">Actualizar Usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="loadPage('eliminar')">Eliminar Usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-sign-out-alt me-1"></i>Salir
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor de alertas -->
+    <div class="alert-container" id="alert-container"></div>
+
+    <!-- Contenido dinámico -->
+    <div id="page-content" class="container mt-4">
+        <!-- El contenido se cargará aquí dinámicamente -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-heartbeat me-2"></i>Salud Integral</h5>
+                    <p>Sistema de gestión de consultorio médico</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">&copy; 2024 Salud Integral. Todos los derechos reservados.</p>
+                    <p class="mb-0">Proyecto Universitario</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script personalizado -->
+    <script>
+        // Base de datos simulada de usuarios
+        let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [
+            {
+                id: "ADM001",
+                nombre: "Ana",
+                apellido: "García",
+                tipo: "administrador",
+                usuario: "anagarcia",
+                password: "admin123"
+            },
+            {
+                id: "SEC001",
+                nombre: "María",
+                apellido: "López",
+                tipo: "secretaria",
+                usuario: "marialopez",
+                password: "secretaria123"
+            },
+            {
+                id: "MED001",
+                nombre: "Carlos",
+                apellido: "Rodríguez",
+                tipo: "medico",
+                usuario: "carlosrodriguez",
+                password: "medico123"
+            }
+        ];
+
+        // Guardar usuarios en localStorage
+        function saveUsers() {
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        }
+
+        // Funcionalidad de enrutamiento
+        function loadPage(page) {
+            const content = document.getElementById('page-content');
+            
+            // Actualizar navegación activa
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('onclick')?.includes(page)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            switch(page) {
+                case 'inicio':
+                    content.innerHTML = getHomePage();
+                    break;
+                case 'agregar':
+                    content.innerHTML = getAddUserPage();
+                    break;
+                case 'consultar':
+                    content.innerHTML = getConsultUserPage();
+                    break;
+                case 'actualizar':
+                    content.innerHTML = getUpdateUserPage();
+                    break;
+                case 'eliminar':
+                    content.innerHTML = getDeleteUserPage();
+                    break;
+                default:
+                    content.innerHTML = getHomePage();
+            }
+        }
+
+        // Página de Inicio
+        function getHomePage() {
+            return `
+                <section class="mb-5">
+                    <h1 class="section-title">Panel de Administración</h1>
+                    <p class="lead">Gestiona los usuarios del sistema de Salud Integral.</p>
+                    
+                    <div class="row g-4 mt-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card feature-card">
+                                <div class="card-body text-center p-4">
+                                    <i class="bi bi-person-plus text-primary d-block mb-3" style="font-size: 56px;"></i>
+                                    <h4 class="card-title mb-3">Agregar Usuario</h4>
+                                    <p class="card-text">Registra un nuevo usuario en el sistema.</p>
+                                    <a href="#" onclick="loadPage('agregar')" class="btn btn-primary rounded-pill mt-auto">
+                                        Acceder <i class="bi bi-arrow-right-short"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card feature-card">
+                                <div class="card-body text-center p-4">
+                                    <i class="bi bi-search text-primary d-block mb-3" style="font-size: 56px;"></i>
+                                    <h4 class="card-title mb-3">Consultar Usuario</h4>
+                                    <p class="card-text">Busca y visualiza información de usuarios.</p>
+                                    <a href="#" onclick="loadPage('consultar')" class="btn btn-primary rounded-pill mt-auto">
+                                        Acceder <i class="bi bi-arrow-right-short"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card feature-card">
+                                <div class="card-body text-center p-4">
+                                    <i class="bi bi-pencil-square text-primary d-block mb-3" style="font-size: 56px;"></i>
+                                    <h4 class="card-title mb-3">Actualizar Usuario</h4>
+                                    <p class="card-text">Modifica la información de usuarios existentes.</p>
+                                    <a href="#" onclick="loadPage('actualizar')" class="btn btn-primary rounded-pill mt-auto">
+                                        Acceder <i class="bi bi-arrow-right-short"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card feature-card">
+                                <div class="card-body text-center p-4">
+                                    <i class="bi bi-person-x text-primary d-block mb-3" style="font-size: 56px;"></i>
+                                    <h4 class="card-title mb-3">Eliminar Usuario</h4>
+                                    <p class="card-text">Elimina usuarios del sistema.</p>
+                                    <a href="#" onclick="loadPage('eliminar')" class="btn btn-primary rounded-pill mt-auto">
+                                        Acceder <i class="bi bi-arrow-right-short"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mt-5">
+                    <h2 class="section-title">Usuarios Registrados</h2>
+                    <div class="user-table p-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Tipo</th>
+                                        <th>Usuario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${usuarios.map(usuario => `
+                                        <tr>
+                                            <td>${usuario.id}</td>
+                                            <td>${usuario.nombre}</td>
+                                            <td>${usuario.apellido}</td>
+                                            <td>
+                                                <span class="badge ${getBadgeClass(usuario.tipo)} user-type-badge">
+                                                    ${usuario.tipo}
+                                                </span>
+                                            </td>
+                                            <td>${usuario.usuario}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        // Página de Agregar Usuario
+        function getAddUserPage() {
+            return `
+                <section>
+                    <h1 class="section-title">Agregar Nuevo Usuario</h1>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="form-container">
+                                <form id="add-user-form">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" name="nombre" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Apellido</label>
+                                                <input type="text" class="form-control" name="apellido" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Tipo de Usuario</label>
+                                                <select class="form-select" name="tipo" required>
+                                                    <option value="">Seleccionar tipo</option>
+                                                    <option value="administrador">Administrador</option>
+                                                    <option value="secretaria">Secretaria</option>
+                                                    <option value="medico">Médico</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">ID</label>
+                                                <input type="text" class="form-control" name="id" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Usuario</label>
+                                                <input type="text" class="form-control" name="usuario" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Contraseña</label>
+                                                <input type="password" class="form-control" name="password" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <a href="#" onclick="loadPage('inicio')" class="btn btn-outline-secondary">
+                                            <i class="fas fa-arrow-left me-2"></i>Volver al Inicio
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-2"></i>Agregar Usuario
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        // Página de Consultar Usuario
+        function getConsultUserPage() {
+            return `
+                <section>
+                    <h1 class="section-title">Consultar Usuario</h1>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="form-container">
+                                <div class="mb-4">
+                                    <h4>Lista de Usuarios</h4>
+                                    <p class="text-muted">Selecciona un usuario para ver su información</p>
+                                </div>
+                                
+                                <div class="user-list-container">
+                                    ${usuarios.map(usuario => `
+                                        <div class="user-card" onclick="showUserDetails('${usuario.id}')">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h5>${usuario.nombre} ${usuario.apellido}</h5>
+                                                    <p class="mb-1"><strong>ID:</strong> ${usuario.id}</p>
+                                                    <p class="mb-1"><strong>Usuario:</strong> ${usuario.usuario}</p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p class="mb-1"><strong>Tipo:</strong> 
+                                                        <span class="badge ${getBadgeClass(usuario.tipo)} user-type-badge">
+                                                            ${usuario.tipo}
+                                                        </span>
+                                                    </p>
+                                                    <p class="mb-0"><strong>Contraseña:</strong> ••••••••</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                
+                                <div id="user-details" class="mt-4" style="display: none;">
+                                    <!-- Los detalles del usuario se mostrarán aquí -->
+                                </div>
+                                
+                                <div class="d-flex justify-content-start mt-4">
+                                    <a href="#" onclick="loadPage('inicio')" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Volver al Inicio
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        // Página de Actualizar Usuario
+        function getUpdateUserPage() {
+            return `
+                <section>
+                    <h1 class="section-title">Actualizar Usuario</h1>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="form-container">
+                                <div class="mb-4">
+                                    <h4>Selecciona un Usuario para Actualizar</h4>
+                                    <p class="text-muted">Haz clic en un usuario para cargar sus datos en el formulario</p>
+                                </div>
+                                
+                                <div class="user-list-container">
+                                    ${usuarios.map(usuario => `
+                                        <div class="user-card" onclick="loadUserForUpdate('${usuario.id}')" id="user-card-${usuario.id}">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h5>${usuario.nombre} ${usuario.apellido}</h5>
+                                                    <p class="mb-1"><strong>ID:</strong> ${usuario.id}</p>
+                                                    <p class="mb-1"><strong>Usuario:</strong> ${usuario.usuario}</p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p class="mb-1"><strong>Tipo:</strong> 
+                                                        <span class="badge ${getBadgeClass(usuario.tipo)} user-type-badge">
+                                                            ${usuario.tipo}
+                                                        </span>
+                                                    </p>
+                                                    <p class="mb-0"><strong>Contraseña:</strong> ••••••••</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                
+                                <form id="update-user-form" style="display: none;">
+                                    <h4 class="mt-4 mb-3">Formulario de Actualización</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" name="nombre" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Apellido</label>
+                                                <input type="text" class="form-control" name="apellido" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Tipo de Usuario</label>
+                                                <select class="form-select" name="tipo" required>
+                                                    <option value="">Seleccionar tipo</option>
+                                                    <option value="administrador">Administrador</option>
+                                                    <option value="secretaria">Secretaria</option>
+                                                    <option value="medico">Médico</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">ID</label>
+                                                <input type="text" class="form-control" name="id" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Usuario</label>
+                                                <input type="text" class="form-control" name="usuario" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Contraseña</label>
+                                                <input type="password" class="form-control" name="password" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <a href="#" onclick="loadPage('inicio')" class="btn btn-outline-secondary">
+                                            <i class="fas fa-arrow-left me-2"></i>Volver al Inicio
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-sync-alt me-2"></i>Actualizar Usuario
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        // Página de Eliminar Usuario
+        function getDeleteUserPage() {
+            return `
+                <section>
+                    <h1 class="section-title">Eliminar Usuario</h1>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="form-container">
+                                <div class="mb-4">
+                                    <h4>Selecciona un Usuario para Eliminar</h4>
+                                    <p class="text-muted">Haz clic en un usuario para ver sus detalles y eliminarlo</p>
+                                </div>
+                                
+                                <div class="user-list-container">
+                                    ${usuarios.map(usuario => `
+                                        <div class="user-card" onclick="selectUserForDelete('${usuario.id}')" id="delete-user-card-${usuario.id}">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <h5>${usuario.nombre} ${usuario.apellido}</h5>
+                                                    <p class="mb-1"><strong>ID:</strong> ${usuario.id}</p>
+                                                    <p class="mb-1"><strong>Usuario:</strong> ${usuario.usuario}</p>
+                                                    <p class="mb-0"><strong>Tipo:</strong> 
+                                                        <span class="badge ${getBadgeClass(usuario.tipo)} user-type-badge">
+                                                            ${usuario.tipo}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-4 d-flex align-items-center justify-content-end">
+                                                    <button class="btn btn-danger" onclick="event.stopPropagation(); confirmDeleteUser('${usuario.id}')">
+                                                        <i class="fas fa-trash me-2"></i>Eliminar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                
+                                <div class="d-flex justify-content-start mt-4">
+                                    <a href="#" onclick="loadPage('inicio')" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Volver al Inicio
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        // Funciones auxiliares
+        function getBadgeClass(tipo) {
+            switch(tipo) {
+                case 'administrador': return 'bg-danger';
+                case 'secretaria': return 'bg-primary';
+                case 'medico': return 'bg-success';
+                default: return 'bg-secondary';
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertId = 'alert-' + Date.now();
+            
+            const alertHTML = `
+                <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            alertContainer.innerHTML += alertHTML;
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                const alertElement = document.getElementById(alertId);
+                if (alertElement) {
+                    alertElement.remove();
+                }
+            }, 5000);
+        }
+
+        // Funciones para la gestión de usuarios
+        function addUser(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            const nuevoUsuario = {
+                id: formData.get('id'),
+                nombre: formData.get('nombre'),
+                apellido: formData.get('apellido'),
+                tipo: formData.get('tipo'),
+                usuario: formData.get('usuario'),
+                password: formData.get('password')
+            };
+            
+            // Validar si el ID ya existe
+            const idExistente = usuarios.find(u => u.id === nuevoUsuario.id);
+            if (idExistente) {
+                showAlert('ID no válido: Ya existe un usuario con ese ID', 'danger');
+                return;
+            }
+            
+            // Validar si el usuario ya existe
+            const usuarioExistente = usuarios.find(u => u.usuario === nuevoUsuario.usuario);
+            if (usuarioExistente) {
+                showAlert('Usuario no válido: Ya existe un usuario con ese nombre de usuario', 'danger');
+                return;
+            }
+            
+            // Agregar usuario
+            usuarios.push(nuevoUsuario);
+            saveUsers();
+            showAlert('Usuario agregado exitosamente', 'success');
+            event.target.reset();
+        }
+
+        function showUserDetails(userId) {
+            const usuarioEncontrado = usuarios.find(u => u.id === userId);
+            const detailsContainer = document.getElementById('user-details');
+            
+            if (usuarioEncontrado) {
+                detailsContainer.innerHTML = `
+                    <div class="user-card">
+                        <h4>Detalles del Usuario</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Nombre:</strong> ${usuarioEncontrado.nombre}</p>
+                                <p><strong>Apellido:</strong> ${usuarioEncontrado.apellido}</p>
+                                <p><strong>ID:</strong> ${usuarioEncontrado.id}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Usuario:</strong> ${usuarioEncontrado.usuario}</p>
+                                <p><strong>Tipo:</strong> 
+                                    <span class="badge ${getBadgeClass(usuarioEncontrado.tipo)} user-type-badge">
+                                        ${usuarioEncontrado.tipo}
+                                    </span>
+                                </p>
+                                <p><strong>Contraseña:</strong> ${usuarioEncontrado.password}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                detailsContainer.style.display = 'block';
+                showAlert('Datos correctos: Usuario encontrado', 'success');
+            } else {
+                detailsContainer.innerHTML = '<p class="text-danger">Usuario no encontrado</p>';
+                detailsContainer.style.display = 'block';
+                showAlert('Usuario no válido: No se encontró el usuario', 'danger');
+            }
+        }
+
+        function loadUserForUpdate(userId) {
+            // Quitar selección de todas las tarjetas
+            document.querySelectorAll('.user-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Seleccionar la tarjeta actual
+            document.getElementById(`user-card-${userId}`).classList.add('selected');
+            
+            const usuarioEncontrado = usuarios.find(u => u.id === userId);
+            const form = document.getElementById('update-user-form');
+            
+            if (usuarioEncontrado) {
+                // Llenar el formulario con los datos del usuario
+                form.querySelector('input[name="id"]').value = usuarioEncontrado.id;
+                form.querySelector('input[name="nombre"]').value = usuarioEncontrado.nombre;
+                form.querySelector('input[name="apellido"]').value = usuarioEncontrado.apellido;
+                form.querySelector('select[name="tipo"]').value = usuarioEncontrado.tipo;
+                form.querySelector('input[name="usuario"]').value = usuarioEncontrado.usuario;
+                form.querySelector('input[name="password"]').value = usuarioEncontrado.password;
+                
+                form.style.display = 'block';
+                showAlert('Datos correctos: Usuario encontrado', 'success');
+            } else {
+                form.style.display = 'none';
+                showAlert('ID no válido: No se encontró el usuario', 'danger');
+            }
+        }
+
+        function updateUser(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const id = formData.get('id');
+            
+            const usuarioIndex = usuarios.findIndex(u => u.id === id);
+            
+            if (usuarioIndex !== -1) {
+                // Verificar si el nuevo nombre de usuario ya existe en otro usuario
+                const nuevoUsuario = formData.get('usuario');
+                const usuarioExistente = usuarios.find(u => u.usuario === nuevoUsuario && u.id !== id);
+                
+                if (usuarioExistente) {
+                    showAlert('Usuario no válido: Ya existe otro usuario con ese nombre de usuario', 'danger');
+                    return;
+                }
+                
+                // Actualizar usuario
+                usuarios[usuarioIndex] = {
+                    id: id,
+                    nombre: formData.get('nombre'),
+                    apellido: formData.get('apellido'),
+                    tipo: formData.get('tipo'),
+                    usuario: nuevoUsuario,
+                    password: formData.get('password')
+                };
+                
+                saveUsers();
+                showAlert('Usuario actualizado exitosamente', 'success');
+                
+                // Recargar la página para mostrar los cambios
+                loadPage('actualizar');
+            } else {
+                showAlert('Error: No se pudo actualizar el usuario', 'danger');
+            }
+        }
+
+        function selectUserForDelete(userId) {
+            // Quitar selección de todas las tarjetas
+            document.querySelectorAll('.user-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Seleccionar la tarjeta actual
+            document.getElementById(`delete-user-card-${userId}`).classList.add('selected');
+        }
+
+        function confirmDeleteUser(userId) {
+            if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
+                const usuarioIndex = usuarios.findIndex(u => u.id === userId);
+                
+                if (usuarioIndex !== -1) {
+                    usuarios.splice(usuarioIndex, 1);
+                    saveUsers();
+                    showAlert('Usuario borrado exitosamente', 'success');
+                    
+                    // Recargar la página para mostrar los cambios
+                    loadPage('eliminar');
+                } else {
+                    showAlert('Error: No se pudo eliminar el usuario', 'danger');
+                }
+            }
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPage('inicio');
+            
+            // Asignar eventos a los formularios
+            document.addEventListener('submit', function(event) {
+                if (event.target.id === 'add-user-form') {
+                    addUser(event);
+                } else if (event.target.id === 'update-user-form') {
+                    updateUser(event);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

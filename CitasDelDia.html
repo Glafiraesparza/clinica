@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas del Día - Clínica Salud Integral</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e4a80;;
+            --secondary-color: #206797;
+            --accent-color: #e74c3c;
+            --background-light: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --success-color: #3e63a0;
+            --warning-color: #ffffff;
+            --error-color: #e74c3c;
+        }
+        
+        body {
+            font-family: "Roboto", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 300;
+      font-style: normal;
+      background-color: hsl(0, 0%, 100%);
+      background-image: radial-gradient(800px circle at 100% 0%,
+          hsl(211, 58%, 92%) 15%,
+          hsl(210, 86%, 97%) 35%,
+          hsl(223, 91%, 95%) 75%,
+          hsl(214, 100%, 99%) 80%,
+          transparent 100%),
+          radial-gradient(600px circle at 0% 100%,
+            hsl(202, 46%, 92%) 15%,
+            hsl(0, 0%, 100%) 35%,
+            hsl(210, 100%, 96%) 75%,
+            hsl(216, 100%, 99%) 80%,
+            transparent 100%);
+
+            line-height: 1.6;
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+        font-family: "DM Sans", sans-serif;
+        font-weight: 600;
+
+        
+    }
+
+     .mb-0{
+        color:#2c3e50;
+    }
+        
+        /* Sidebar profesional */
+        .sidebar {
+            background: linear-gradient(to bottom, #2e4a80, #1c5085);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 30px;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.85);
+            padding: 14px 25px;
+            margin: 6px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            width: 22px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .doctor-main-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid rgba(255,255,255,0.3);
+            margin: 0 auto 20px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .doctor-main-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .doctor-id-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 15px;
+            border-radius: 15px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        /* Header mejorado */
+        .clinic-header {
+            background: linear-gradient(135deg, #e8f0ff, #90beeb);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .clinic-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transform: translate(40%, -40%);
+        }
+        
+        /* Filtros y controles */
+        .controls-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #bdc3c7;
+        }
+        
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+            color: var(--text-dark);
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+            color: white;
+        }
+        
+        /* Tarjeta de citas */
+        .appointments-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid #bdc3c7;
+        }
+        
+        .appointments-header {
+            background: linear-gradient(135deg, var(--success-color), #2980b9);
+            color: white;
+            padding: 25px 30px;
+            position: relative;
+        }
+        
+        .appointments-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .appointments-body {
+            padding: 0;
+        }
+        
+        /* Lista de citas */
+        .appointment-item {
+            display: flex;
+            padding: 20px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+        }
+        
+        .appointment-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .appointment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .appointment-time {
+            min-width: 120px;
+            text-align: center;
+            padding-right: 25px;
+            border-right: 2px solid #f0f0f0;
+        }
+        
+        .appointment-date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+        
+        .appointment-hour {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+        
+        .appointment-info {
+            flex: 1;
+            padding-left: 25px;
+        }
+        
+        .appointment-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .appointment-details {
+            flex: 1;
+        }
+        
+        .appointment-motivo {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        
+        .appointment-ids {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .id-badge {
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .id-paciente {
+            color: var(--success-color);
+            border-left: 3px solid var(--success-color);
+        }
+        
+        .id-medico {
+            color: var(--secondary-color);
+            border-left: 3px solid var(--secondary-color);
+        }
+        
+        .appointment-status {
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-pendiente {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmada {
+            background-color: #d1edff;
+            color: #0c5460;
+        }
+        
+        .status-completada {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cancelada {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Estadísticas rápidas */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #bdc3c7;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-citas {
+            color: var(--secondary-color);
+        }
+        
+        .stat-pendientes {
+            color:#856404;
+        }
+        
+        .stat-completadas {
+            color:#155724;
+        }
+        
+        .stat-confirmadas {
+            color:#0c5460;
+        }
+        
+        .stat-canceladas {
+            color:#721c24;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .appointment-item {
+                flex-direction: column;
+            }
+            
+            .appointment-time {
+                border-right: none;
+                border-bottom: 2px solid #f0f0f0;
+                padding-right: 0;
+                padding-bottom: 15px;
+                margin-bottom: 15px;
+                text-align: left;
+            }
+            
+            .appointment-info {
+                padding-left: 0;
+            }
+            
+            .appointment-main {
+                flex-direction: column;
+            }
+            
+            .appointment-status {
+                margin-top: 10px;
+                text-align: left;
+            }
+        }
+        
+        /* Efectos de notificación */
+        .notification-badge {
+            position: relative;
+        }
+        
+        .notification-badge::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--error-color);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        /* Estilo para el botón de cerrar sesión */
+        .logout-section {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .btn-logout {
+            background: linear-gradient(135deg, var(--error-color), #c0392b);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="d-flex flex-column align-items-center mb-5">
+                    <div class="doctor-main-avatar mb-3">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Dr. Juan Pérez">
+                    </div>
+                    <h5 class="mb-1">Dr. Juan Pérez</h5>
+                    <small>Endocrinólogo</small>
+                    <small>Clínica Salud Integral</small>
+                </div>
+                
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="PrincipalMedico.html">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pacientes.html">
+                            <i class="fas fa-user-injured"></i> Pacientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Expedientes.html">
+                            <i class="fas fa-folder"></i> Expedientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="CitasDelDIA.html">
+                            <i class="fas fa-calendar-check"></i> Citas del Día
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="nav-link --text-light" href="index.html">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Contenido principal -->
+            <div class="col-md-9 col-lg-9 main-content">
+                <!-- Header de la clínica -->
+                <div class="clinic-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="mb-0"><i class="fas fa-calendar-day me-2"></i>Citas del Día</h2>
+                            <p class="mb-0">Gestión de consultas programadas - Endocrinología</p>
+                        </div>
+                        <div class="text-end">
+                            <p class="mb-0"><strong>Hoy:</strong> <span id="current-date"></span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas rápidas -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-number stat-citas" id="total-citas">8</div>
+                        <div class="stat-label">Total de Citas Hoy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number stat-pendientes" id="pendientes-citas">3</div>
+                        <div class="stat-label">Citas Pendientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number stat-completadas" id="completadas-citas">2</div>
+                        <div class="stat-label">Citas Completadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number stat-confirmadas" id="confirmadas-citas">2</div>
+                        <div class="stat-label">Citas Confirmadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number stat-canceladas" id="canceladas-citas">1</div>
+                        <div class="stat-label">Citas Canceladas</div>
+                    </div>
+                </div>
+
+                <!-- Controles de filtrado -->
+                <div class="controls-card">
+                    <div class="filter-section">
+                        <span class="fw-bold">Filtrar por estado:</span>
+                        <button class="filter-btn active" data-filter="all">Todas</button>
+                        <button class="filter-btn" data-filter="pendiente">Pendientes</button>
+                        <button class="filter-btn" data-filter="confirmada">Confirmadas</button>
+                        <button class="filter-btn" data-filter="completada">Completadas</button>
+                        <button class="filter-btn" data-filter="cancelada">Canceladas</button>
+                    </div>
+                </div>
+
+                <!-- Lista de citas -->
+                <div class="appointments-card">
+                    <div class="appointments-header">
+                        <h3 class="mb-1"><i class="fas fa-list-alt me-2"></i>Lista de Citas Programadas</h3>
+                    </div>
+                    
+                    <div class="appointments-body">
+                        <!-- Cita 1 -->
+                        <div class="appointment-item" data-status="pendiente">
+                            <div class="appointment-time">
+                                <div class="appointment-date">15 Nov 2023</div>
+                                <div class="appointment-hour">08:30</div>
+                                <div class="appointment-period">AM</div>
+                            </div>
+                            <div class="appointment-info">
+                                <div class="appointment-main">
+                                    <div class="appointment-details">
+                                        <div class="appointment-motivo">Control diabetes tipo 2 - Ajuste de medicación</div>
+                                        <div class="appointment-ids">
+                                            <span class="id-badge id-paciente">ID Paciente: PAC-2023-1287</span>
+                                            <span class="id-badge id-medico">ID Médico: MED-2023-0452</span>
+                                        </div>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="status-badge status-pendiente">Pendiente</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cita 2 -->
+                        <div class="appointment-item" data-status="confirmada">
+                            <div class="appointment-time">
+                                <div class="appointment-date">15 Nov 2023</div>
+                                <div class="appointment-hour">09:45</div>
+                                <div class="appointment-period">AM</div>
+                            </div>
+                            <div class="appointment-info">
+                                <div class="appointment-main">
+                                    <div class="appointment-details">
+                                        <div class="appointment-motivo">Evaluación de hipotiroidismo - Seguimiento</div>
+                                        <div class="appointment-ids">
+                                            <span class="id-badge id-paciente">ID Paciente: PAC-2023-0934</span>
+                                            <span class="id-badge id-medico">ID Médico: MED-2023-0452</span>
+                                        </div>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="status-badge status-confirmada">Confirmada</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cita 3 -->
+                        <div class="appointment-item" data-status="completada">
+                            <div class="appointment-time">
+                                <div class="appointment-date">15 Nov 2023</div>
+                                <div class="appointment-hour">10:15</div>
+                                <div class="appointment-period">AM</div>
+                            </div>
+                            <div class="appointment-info">
+                                <div class="appointment-main">
+                                    <div class="appointment-details">
+                                        <div class="appointment-motivo">Consulta por obesidad - Plan alimenticio</div>
+                                        <div class="appointment-ids">
+                                            <span class="id-badge id-paciente">ID Paciente: PAC-2023-1576</span>
+                                            <span class="id-badge id-medico">ID Médico: MED-2023-0452</span>
+                                        </div>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="status-badge status-completada">Completada</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cita 4 -->
+                        <div class="appointment-item" data-status="pendiente">
+                            <div class="appointment-time">
+                                <div class="appointment-date">15 Nov 2023</div>
+                                <div class="appointment-hour">11:30</div>
+                                <div class="appointment-period">AM</div>
+                            </div>
+                            <div class="appointment-info">
+                                <div class="appointment-main">
+                                    <div class="appointment-details">
+                                        <div class="appointment-motivo">Revisión de resultados de laboratorio</div>
+                                        <div class="appointment-ids">
+                                            <span class="id-badge id-paciente">ID Paciente: PAC-2023-2045</span>
+                                            <span class="id-badge id-medico">ID Médico: MED-2023-0452</span>
+                                        </div>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="status-badge status-pendiente">Pendiente</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cita 5 -->
+                        <div class="appointment-item" data-status="confirmada">
+                            <div class="appointment-time">
+                                <div class="appointment-date">15 Nov 2023</div>
+                                <div class="appointment-hour">13:00</div>
+                                <div class="appointment-period">PM</div>
+                            </div>
+                            <div class="appointment-info">
+                                <div class="appointment-main">
+                                    <div class="appointment-details">
+                                        <div class="appointment-motivo">Control de osteoporosis - Densitometría</div>
+                                        <div class="appointment-ids">
+                                            <span class="id-badge id-paciente">ID Paciente: PAC-2023-0889</span>
+                                            <span class="id-badge id-medico">ID Médico: MED-2023-0452</span>
+                                        </div>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="status-badge status-confirmada">Confirmada</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cita 6 -->
+                        <div class="appointment-item" data-status="completada">
+                            <div class="appointment-time">
+                                <div class="appointment-date">15 Nov 2023</div>
+                                <div class="appointment-hour">14:20</div>
+                                <div class="appointment-period">PM</div>
+                            </div>
+                            <div class="appointment-info">
+                                <div class="appointment-main">
+                                    <div class="appointment-details">
+                                        <div class="appointment-motivo">Síndrome de ovario poliquístico - Control hormonal</div>
+                                        <div class="appointment-ids">
+                                            <span class="id-badge id-paciente">ID Paciente: PAC-2023-1123</span>
+                                            <span class="id-badge id-medico">ID Médico: MED-2023-0452</span>
+                                        </div>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="status-badge status-completada">Completada</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cita 7 -->
+                        <div class="appointment-item" data-status="pendiente">
+                            <div class="appointment-time">
+                                <div class="appointment-date">15 Nov 2023</div>
+                                <div class="appointment-hour">15:45</div>
+                                <div class="appointment-period">PM</div>
+                            </div>
+                            <div class="appointment-info">
+                                <div class="appointment-main">
+                                    <div class="appointment-details">
+                                        <div class="appointment-motivo">Primera consulta - Trastornos tiroideos</div>
+                                        <div class="appointment-ids">
+                                            <span class="id-badge id-paciente">ID Paciente: PAC-2023-1998</span>
+                                            <span class="id-badge id-medico">ID Médico: MED-2023-0452</span>
+                                        </div>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="status-badge status-pendiente">Pendiente</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cita 8 -->
+                        <div class="appointment-item" data-status="cancelada">
+                            <div class="appointment-time">
+                                <div class="appointment-date">15 Nov 2023</div>
+                                <div class="appointment-hour">16:30</div>
+                                <div class="appointment-period">PM</div>
+                            </div>
+                            <div class="appointment-info">
+                                <div class="appointment-main">
+                                    <div class="appointment-details">
+                                        <div class="appointment-motivo">Control diabetes tipo 1 - Ajuste de insulina</div>
+                                        <div class="appointment-ids">
+                                            <span class="id-badge id-paciente">ID Paciente: PAC-2023-1422</span>
+                                            <span class="id-badge id-medico">ID Médico: MED-2023-0452</span>
+                                        </div>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="status-badge status-cancelada">Cancelada</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Mostrar fecha actual
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('es-ES', options);
+        
+        // Filtrado de citas
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remover clase active de todos los botones
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Agregar clase active al botón clickeado
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                const appointments = document.querySelectorAll('.appointment-item');
+                
+                appointments.forEach(appointment => {
+                    if (filter === 'all') {
+                        appointment.style.display = 'flex';
+                    } else {
+                        if (appointment.getAttribute('data-status') === filter) {
+                            appointment.style.display = 'flex';
+                        } else {
+                            appointment.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Actualizar estadísticas
+        function updateStats() {
+            const total = document.querySelectorAll('.appointment-item').length;
+            const pendientes = document.querySelectorAll('.appointment-item[data-status="pendiente"]').length;
+            const confirmadas = document.querySelectorAll('.appointment-item[data-status="confirmada"]').length;
+            const completadas = document.querySelectorAll('.appointment-item[data-status="completada"]').length;
+            const canceladas = document.querySelectorAll('.appointment-item[data-status="cancelada"]').length;
+            
+            document.getElementById('total-citas').textContent = total;
+            document.getElementById('pendientes-citas').textContent = pendientes;
+            document.getElementById('confirmadas-citas').textContent = confirmadas;
+            document.getElementById('completadas-citas').textContent = completadas;
+            document.getElementById('canceladas-citas').textContent = canceladas;
+        }
+        
+        // Inicializar estadísticas
+        updateStats();
+    </script>
+</body>
+</html>
